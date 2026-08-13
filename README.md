@@ -40,6 +40,7 @@ node index.js
 | `YOUTUBE_CHANNEL_ID` | sim | ID do canal do YouTube (começa com `UC...`) |
 | `DISCORD_WEBHOOK_URL_VIDEOS` | sim | URL do webhook do canal `#🎥-vídeos-novos` |
 | `DISCORD_WEBHOOK_URL_NEWS` | sim | URL do webhook do canal `#📰-notícias` |
+| `DEEPL_API_KEY` | sim | API Key da DeepL (plano Free, sufixo `:fx`) — traduz notícias do japonês |
 | `DISCORD_MESSAGE_PREFIX` | não | Texto antes do embed de vídeo. Default: `Vídeo novo no ar!` |
 | `DISCORD_NEWS_PREFIX` | não | Texto antes do embed de notícia. Default: `Notícia nova!` |
 | `STATE_FILE` | não | Path do arquivo de estado. Default: `state.json` |
@@ -50,9 +51,13 @@ node index.js
 Polling na YouTube Data API v3 (`channels` + `playlistItems`, ~2 unidades de quota por run — folgado dentro do limite gratuito de 10.000/dia mesmo rodando a cada 15min).
 
 ### `checkers/news.js`
-Consome o RSS público da [Revista Alternativa](https://revistaalternativa.jp/feed/) (WordPress padrão). Sem custo de quota — é só um GET.
+Consome o RSS da **NHK doméstica** (`www3.nhk.or.jp/rss/news/cat0.xml`, japonês, notícia dura de verdade) e traduz título + descrição pro português via **DeepL API Free** (500 mil caracteres/mês grátis, nunca expira).
 
-**Fontes descartadas nessa investigação:** NHK World Português não tem RSS público (site é um app React com API GraphQL interna, não documentada); Portal Mie está atrás de proteção Cloudflare anti-bot.
+**Fontes descartadas nessa investigação:**
+- NHK World Português — sem RSS público (app React com API GraphQL interna não documentada)
+- Portal Mie — bloqueado por Cloudflare anti-bot (não contornado, é linha rígida)
+- Revista Alternativa — RSS funciona, mas é revista de lifestyle (beleza, culinária, moda), não notícia dura
+- Alternativa Online, IPC Digital, RPJNEWS, International Press (edição PT) — feeds quebrados, domínios errados ou fora do ar
 
 ## Deploy
 

@@ -1,39 +1,42 @@
 import { XMLParser } from "fast-xml-parser";
 import { postEmbed } from "../lib/discord.js";
 
-const { DISCORD_WEBHOOK_URL_NEWS, DISCORD_NEWS_PREFIX = "Notícia nova!" } = process.env;
+const { DISCORD_WEBHOOK_URL_NEWS, DEEPL_API_KEY, DISCORD_NEWS_PREFIX = "Notícia nova!" } = process.env;
 
-const FEED_URL = "https://revistaalternativa.jp/feed/";
-const SOURCE_NAME = "Revista Alternativa";
-const SOURCE_URL = "https://revistaalternativa.jp/";
+const FEED_URL = "https://www3.nhk.or.jp/rss/news/cat0.xml";
+const SOURCE_NAME = "NHK News (traduzido)";
+const SOURCE_URL = "https://www3.nhk.or.jp/news/";
 
 // Cor de acento "Coral" do guia de identidade visual — diferencia notícia de vídeo.
 const EMBED_COLOR = 0xf2947c;
 
 function stripTags(html) {
-  return html
-    .replace(/<[^>]+>/g, "")
-    .replace(/&#8230;/g, "…")
-    .replace(/&amp;/g, "&")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return (html || "").replace(/<[^>]+>/g, "").trim();
 }
 
-// O WordPress sempre acrescenta "O post [...] apareceu primeiro em [site]." no fim
-// do excerpt do RSS — corta essa parte, que não interessa pra notificação.
-function cleanExcerpt(rawDescription) {
-  const text = stripTags(rawDescription);
-  const cut = text.indexOf("O post ");
-  const excerpt = cut === -1 ? text : text.slice(0, cut).trim();
-  return excerpt.length > 280 ? excerpt.slice(0, 277).trim() + "…" : excerpt;
+// DeepL API Free: 500k caracteres/mês, nunca expira. Endpoint free é separado do pago.
+async function translate(texts) {
+  const res = await fetch("https://api-free.deepl.com/v2/translate", {
+    method: "POST",
+    headers: {
+      Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ text: texts, source_lang: "JA", target_lang: "PT-BR" }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`DeepL API ${res.status}: ${body}`);
+  }
+  const data = await res.json();
+  return data.translations.map((t) => t.text);
 }
 
-async function getLatestPost() {
+async function getLatestNews() {
   const res = await fetch(FEED_URL);
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(`Revista Alternativa RSS ${res.status}: ${body}`);
+    throw new Error(`NHK RSS ${res.status}: ${body}`);
   }
   const xml = await res.text();
   const parser = new XMLParser({ ignoreAttributes: true });
@@ -43,37 +46,36 @@ async function getLatestPost() {
   const item = items[0];
   if (!item) return null;
 
-  const categories = [].concat(item.category || []).filter(Boolean);
-
   return {
-    guid: String(item.guid?.["#text"] ?? item.guid),
-    title: item.title,
+    guid: String(item.guid?.["#text"] ?? item.guid ?? item.link),
+    titleJa: stripTags(item.title),
+    descriptionJa: stripTags(item.description || ""),
     link: item.link,
     pubDate: item.pubDate,
-    excerpt: cleanExcerpt(item.description || ""),
-    category: categories[0],
   };
 }
 
 async function postNews(post) {
+  const toTranslate = [post.titleJa, post.descriptionJa].filter(Boolean);
+  const [titlePt, descPt] = await translate(toTranslate);
+
   const embed = {
-    title: post.title,
+    title: titlePt || post.titleJa,
     url: post.link,
     color: EMBED_COLOR,
-    description: post.excerpt || undefined,
+    description: descPt || undefined,
     author: { name: SOURCE_NAME, url: SOURCE_URL },
-    footer: post.category ? { text: post.category } : undefined,
+    footer: { text: "Traduzido automaticamente do japonês (NHK News)" },
     timestamp: new Date(post.pubDate).toISOString(),
   };
   await postEmbed(DISCORD_WEBHOOK_URL_NEWS, embed, DISCORD_NEWS_PREFIX);
 }
 
 export async function check(previousState) {
-  if (!DISCORD_WEBHOOK_URL_NEWS) {
-    throw new Error("Variável ausente: DISCORD_WEBHOOK_URL_NEWS");
-  }
+  if (!DISCORD_WEBHOOK_URL_NEWS) throw new Error("Variável ausente: DISCORD_WEBHOOK_URL_NEWS");
+  if (!DEEPL_API_KEY) throw new Error("Variável ausente: DEEPL_API_KEY");
 
-  const latest = await getLatestPost();
+  const latest = await getLatestNews();
   if (!latest) {
     return { state: previousState, message: "nenhuma notícia encontrada no feed" };
   }

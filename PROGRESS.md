@@ -19,7 +19,20 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Secret `DISCORD_WEBHOOK_URL_NEWS` adicionado no GitHub Actions
 - [x] README.md reescrito refletindo a arquitetura nova
 
-**Tasks #3 e #4 concluídas** (repurpose: NHK virou Revista Alternativa). **Task #5 (Portal Mie) abandonada** — bloqueio de Cloudflare não é contornável dentro das minhas regras.
+**Tasks #3 e #4 concluídas**. **Task #5 (Portal Mie) abandonada** — bloqueio de Cloudflare não é contornável dentro das minhas regras.
+
+## Checklist — Pivô de fonte: Revista Alternativa → NHK + DeepL (2026-08-13, mesmo dia)
+- [x] User notou que o post de teste (coluna "Imagem", moda/estilo) não parecia notícia — investigação mais a fundo
+- [x] Categorias reais da Revista Alternativa levantadas via API REST do WordPress: é revista de lifestyle (Beleza, Saúde, Culinária dominam), não notícia dura
+- [x] Busca por fonte de notícia dura em português: International Press (edição PT fora do ar, só ES ativo em internationalpress.jp), RPJNEWS (feed 404), IPC Digital (domínio repassado, sem relação) — todas descartadas
+- [x] NHK doméstica (`www3.nhk.or.jp/rss/news/cat0.xml`) confirmada: RSS real, notícia dura, japonês
+- [x] Confirmado tier gratuito real da DeepL (500k chars/mês, nunca expira) antes de pedir pro user criar conta
+- [x] `checkers/news.js` reescrito: busca NHK, traduz título+descrição via DeepL API Free, posta embed com aviso de tradução automática no rodapé
+- [x] `DEEPL_API_KEY` — user criou conta e colou no `.env`
+- [x] `state.json` resetado (formato de guid mudou de fonte)
+- [x] Teste local completo: primeiro run + notícia nova traduzida postada com sucesso
+- [x] Workflow do GitHub Actions atualizado com `DEEPL_API_KEY`, secret criado
+- [x] README/PLAN atualizados
 
 ## Checklist — Reestruturação de canais (2026-08-13)
 - [x] Canal `#🎥-vídeos-novos` criado dentro de `INFORMAÇÕES` (id `1537298557856649286`)

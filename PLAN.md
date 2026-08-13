@@ -62,10 +62,12 @@ Servidor do amigo. Sprint 1 focado em: (1) bot de notificações, (2) polimento 
 | Portal Mie | ❌ **Bloqueado por Cloudflare** (`Cf-Mitigated: challenge`, desafio anti-bot ativo). Contornar isso é bypass de anti-bot — fora dos limites do que faço, independente de viabilidade técnica. |
 | Alternativa Online (`alternativa.co.jp`) | ❌ Feed em `/feed/` devolve HTML, não XML — RSS quebrado/desativado. |
 | IPC Digital (`ipcdigital.com`) | ❌ Domínio ativo mas conteúdo sem relação (blog de tecnologia genérico). |
-| **Revista Alternativa** (`revistaalternativa.jp`) | ✅ **RSS válido e funcional** — WordPress padrão, `pt-BR`, conteúdo atualizado. Fonte escolhida. |
+| Revista Alternativa (`revistaalternativa.jp`) | ⚠️ RSS válido, mas é revista de **lifestyle** (beleza, culinária, moda) — não notícia dura. Testada e descartada depois que o user notou que o conteúdo não batia com "notícia". |
+| RPJNEWS, IPC Digital, International Press (edição PT) | ❌ Feeds quebrados / domínios mortos ou repassados / edição PT fora do ar |
+| **NHK doméstica** (`www3.nhk.or.jp/rss/news/cat0.xml`) | ✅ **RSS válido, notícia dura de verdade** — mas em japonês |
 | Imigração Japão (出入国在留管理庁) | Não investigado ainda — adiado pra sprint 2 se houver demanda. |
 
-**Checker único de notícias** (`checkers/news.js`) consumindo `https://revistaalternativa.jp/feed/`. Curiosamente bate com o "ou alternativa" que o user mencionou no pedido original — existe uma publicação real com esse nome, focada exatamente no público certo (comunidade brasileira no Japão).
+**Decisão final (2026-08-13):** checker de notícias consome a **NHK doméstica** (japonês) e traduz título+descrição via **DeepL API Free** (500 mil caracteres/mês, nunca expira) antes de postar no Discord. Trade-off aceito: mais uma credencial no setup, em troca de notícia dura de verdade em vez de conteúdo de lifestyle.
 
 ## Passos manuais que dependem do user
 
