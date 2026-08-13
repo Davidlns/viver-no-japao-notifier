@@ -78,7 +78,14 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Mensagem fixada nos 5 — conteúdo genérico/seguro pra regras (não inventei texto de regra específica, só reforço + aponta pra Equipe)
 - [x] Cor do cargo `Equipe` aplicada (`#C6547C`) — desbloqueada quando o dono moveu o cargo do bot acima na hierarquia
 
-**Balde 2 (config visual): essencialmente completo.** Todos os 26 canais/categorias renomeados, todos os canais de texto com pin, 4 cargos com cor, 6 emojis customizados. Resta só: ícone/banner do servidor (não pedido ainda) e possível expansão de hierarquia de cargo (descartada por enquanto).
+## Checklist — Ícone e banner do servidor
+- [x] Verificado nível de boost: `0` (features: `[]`) — **banner bloqueado**, precisa nível 2 (7 boosts). Documentado, não é algo que dá pra contornar.
+- [x] Nenhum arquivo de ícone pronto no Downloads; decisão de gerar na paleta Sakura Pastel em vez de reaproveitar o avatar neon dos bots (evita inconsistência de linha visual)
+- [x] Ícone gerado via SVG (flor de sakura de 5 pétalas, fundo `#221820`) → PNG 512×512 via `admin/generate-icon.js` (sharp, ferramenta pontual)
+- [x] Ícone aplicado ao servidor via `setServerIcon` (novo em `admin/discord-admin.js`)
+- [ ] Banner — pendente até o servidor atingir boost nível 2
+
+**Balde 2 (config visual): essencialmente completo.** Todos os 26 canais/categorias renomeados, todos os canais de texto com pin, 4 cargos com cor, 6 emojis customizados, ícone do servidor. Só falta o banner (bloqueado por boost) e possível expansão de hierarquia de cargo (descartada por enquanto).
 - [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 
 ## Checklist — Avatar customizado do webhook de vídeos

@@ -90,6 +90,20 @@ export function setWebhookAvatar(webhookId, dataUri) {
   });
 }
 
+export function setServerIcon(dataUri, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ icon: dataUri }),
+  });
+}
+
+export function setServerBanner(dataUri, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ banner: dataUri }),
+  });
+}
+
 export function createEmoji(name, dataUri, guildId = DISCORD_GUILD_ID) {
   return discordFetch(`/guilds/${guildId}/emojis`, {
     method: "POST",
