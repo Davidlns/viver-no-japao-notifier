@@ -50,6 +50,13 @@ export function renameChannel(channelId, name) {
   });
 }
 
+export function createMessage(channelId, payload) {
+  return discordFetch(`/channels/${channelId}/messages`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function pinMessage(channelId, messageId) {
   return discordFetch(`/channels/${channelId}/pins/${messageId}`, { method: "PUT" });
 }
@@ -73,6 +80,13 @@ export function setWebhookAvatar(webhookId, dataUri) {
   return discordFetch(`/webhooks/${webhookId}`, {
     method: "PATCH",
     body: JSON.stringify({ avatar: dataUri }),
+  });
+}
+
+export function createEmoji(name, dataUri, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/emojis`, {
+    method: "POST",
+    body: JSON.stringify({ name, image: dataUri }),
   });
 }
 
@@ -190,6 +204,18 @@ async function main() {
       const color = parseInt(hex.replace(/^#/, ""), 16);
       const role = await setRoleColor(roleId, color);
       console.log(`Cargo ${role.name} -> #${hex.replace(/^#/, "")}`);
+      break;
+    }
+    case "create-emoji": {
+      const [name, filePath] = args;
+      if (!name || !filePath) throw new Error("Uso: create-emoji <nome> <caminhoDoArquivo>");
+      const ext = path.extname(filePath).slice(1).toLowerCase();
+      const mime = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif" }[ext];
+      if (!mime) throw new Error(`Extensão não suportada: .${ext}`);
+      const buffer = await fs.readFile(filePath);
+      const dataUri = `data:${mime};base64,${buffer.toString("base64")}`;
+      const emoji = await createEmoji(name, dataUri);
+      console.log(`Emoji criado: :${emoji.name}: (${emoji.id})`);
       break;
     }
     case "set-position": {

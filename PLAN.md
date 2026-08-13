@@ -42,12 +42,19 @@ Servidor do amigo. Sprint 1 focado em: (1) bot de notificações, (2) polimento 
 | # | Item | Depende de |
 |---|---|---|
 | a | Criar canal `📰-notícias` | Permissão Gerenciar Canais ✅ |
-| b | Renomear canais existentes adicionando emoji no nome | Permissão Gerenciar Canais ✅ |
+| b | Renomear canais existentes com convenção `「emoji」nome` | Permissão Gerenciar Canais ✅ |
 | c | Definir paleta de cores dos cargos | Permissão Gerenciar Cargos ✅ |
 | d | Escrever mensagens fixadas por canal (usando embeds via webhook) | Permissão Gerenciar Mensagens ✅ |
 | e | Upload de ícone/banner do servidor | Permissão Gerenciar Servidor ✅ + Boost pra banner |
 | f | Upload de emojis customizados | Permissão Gerenciar Emojis ✅ |
 | g | Paleta geral de cores/tema do servidor (mais cor, menos preto e branco) | Depende de c, e, f combinados |
+
+### Convenção de nome de canal (revisada 2026-08-13, inspirada em exemplo externo — só a convenção, não a estrutura)
+`「emoji」nome-do-canal` — usa aspas de ângulo japonesas (kagi kakko, U+300C/U+300D) em vez de hífen antes do nome. Já aplicado nos dois canais que o bot administra:
+- `#「🎥」vídeos-novos`
+- `#「📰」notícias`
+
+Proposta pros canais que ainda dependem de acesso (categorias privadas): `「📖」leia-primeiro`, `「🌸」regras-e-cultura`, `「👋」apresente-se`, `「🍵」desabafo`, etc. — categorias continuam em texto plano maiúsculo (sem colchete), só canais individuais.
 
 ### Balde 3 — Bots de terceiros (backlog, fora do sprint 1)
 - **Sesh / Apollo** — agenda de eventos da comunidade
