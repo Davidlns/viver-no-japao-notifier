@@ -85,6 +85,10 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Ícone aplicado ao servidor via `setServerIcon` (novo em `admin/discord-admin.js`)
 - [ ] Banner — pendente até o servidor atingir boost nível 2
 
+## Checklist — Tópicos/descrição em todos os canais (2026-08-13)
+- [x] 16 canais de texto com descrição curta no topo (via `setChannelTopic`), reforçando o propósito de cada um sem precisar abrir o pin
+- [x] Esclarecido: seção "Offline" sem agrupamento por cargo é comportamento fixo do cliente Discord, sem contorno possível — mesma categoria de limitação que banner/emoji-de-cargo (boost)
+
 ## Checklist — Atribuição de cargo faltante (2026-08-13)
 - [x] Server Members Intent ativado no Developer Portal (necessário pra listar membros via API)
 - [x] Checados os 10 membros do servidor: só `tarcizo` estava sem nenhum dos 4 cargos — atribuído `🌸 Membro`
