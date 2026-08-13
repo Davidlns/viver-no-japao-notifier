@@ -92,6 +92,12 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Comunidade confirmada ativa via API: `features: ['COMMUNITY', 'NEWS']`, `rules_channel_id` = regras-e-cultura, `public_updates_channel_id` = avisos
 - [x] Tela de Boas-vindas configurada via API (`setWelcomeScreen`): descrição + 2 canais em destaque (`📖 leia-primeiro`, `📜 regras-e-cultura`)
 
+## Checklist — Onboarding com cargo automático (2026-08-13)
+- [x] Confirmado: recurso nativo de Onboarding do Discord (parte de Comunidade), sem precisar de bot 24/7 pra reaction/button roles
+- [x] Prompt configurado via `PUT /guilds/{id}/onboarding`: "Qual sua situação hoje?" com 2 opções — `🤔 Ainda decidindo` → cargo Visitante, `🌸 Já moro ou já decidi vir` → cargo Membro
+- [x] 5 canais padrão definidos pra onboarding: geral, avisos, leia-primeiro, regras-e-cultura, apresente-se
+- [x] Descrição da Tela de Boas-vindas atualizada a pedido: "Comunidade exclusiva dos membros Viver no Japão - Método Zairyu 🌸"
+
 ## Checklist — Tópicos/descrição em todos os canais (2026-08-13)
 - [x] 16 canais de texto com descrição curta no topo (via `setChannelTopic`), reforçando o propósito de cada um sem precisar abrir o pin
 - [x] Esclarecido: seção "Offline" sem agrupamento por cargo é comportamento fixo do cliente Discord, sem contorno possível — mesma categoria de limitação que banner/emoji-de-cargo (boost)
