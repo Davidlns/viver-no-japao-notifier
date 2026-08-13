@@ -61,6 +61,13 @@ export function pinMessage(channelId, messageId) {
   return discordFetch(`/channels/${channelId}/pins/${messageId}`, { method: "PUT" });
 }
 
+export function setChannelTopic(channelId, topic) {
+  return discordFetch(`/channels/${channelId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ topic }),
+  });
+}
+
 export function setChannelPosition(channelId, position) {
   return discordFetch(`/channels/${channelId}`, {
     method: "PATCH",

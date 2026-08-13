@@ -71,7 +71,8 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] 6 emojis customizados subidos: `:sakura_sim:`, `:sakura_amei:`, `:fuji_nao:`, `:matcha_boa:`, `:coral_novo:`, `:senpai_top:`
 - [x] **Mapeamento de acesso real do bot** (2026-08-13): testado com rename no-op em todos os 26 canais/categorias — só a categoria `Comece aqui` (+ 5 canais dentro: leia-primeiro, regras-e-cultura, apresente-se, como-usar-a-comunidade, avisos) está bloqueada. Todo o resto (17 itens) o bot já alcançava, não precisava esperar o dono.
 - [x] Todos os 17 canais/categorias acessíveis renomeados: canais no padrão `「emoji」nome`, categorias em CAIXA ALTA (sem emoji, mesmo padrão de `INFORMAÇÕES`)
-- [ ] Mensagens fixadas nos canais recém-renomeados (fora dos 2 já feitos) — ainda não escrito, precisa de direção de conteúdo por canal
+- [x] Mensagens fixadas em todos os 9 canais de texto acessíveis (geral, 4 fases com progressão de cor lavanda→sakura-deep ecoando a hierarquia de cargo, pergunte-a-hiyori, conquistas, desabafo, materiais)
+- [x] `「🗂️」arquivo-de-perguntas` (canal Fórum) — usa campo "diretrizes" (topic) em vez de pin, já que Fórum não aceita mensagem fixada tradicional
 - [ ] Mensagens fixadas nos 5 canais de `Comece aqui` (texto já pronto no mockup, aguardando acesso)
 - [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 
