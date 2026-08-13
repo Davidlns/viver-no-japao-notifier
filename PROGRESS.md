@@ -99,6 +99,7 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 
 ## Checklist — Guia de apresentação (2026-08-13)
 - [x] `apresente-se` continua liberado pra digitação (não estava no pedido de somente-leitura) — postado guia com modelo em bloco de código (copia-e-cola) + exemplo preenchido, fixado no canal
+- [x] Limpeza: apagadas as mensagens anteriores (incluindo uma do dono), mantida só a mensagem do guia fixada
 
 ## Checklist — Canal de Vistos / Imigração (2026-08-13)
 - [x] Documento HTML do user ("mapa-dos-vistos.html", 7 grupos de visto com fontes oficiais) publicado como Artifact, com fontes customizadas (Zen Kaku Gothic New, IBM Plex Mono, IBM Plex Sans) embutidas em base64 pra preservar o visual original — decisão: linkar em vez de recriar em embeds nativos, pra não perder a tipografia/design já feito
