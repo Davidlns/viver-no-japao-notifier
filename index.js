@@ -39,11 +39,11 @@ async function saveState(state) {
   await fs.writeFile(STATE_PATH, JSON.stringify(state, null, 2), "utf8");
 }
 
-// Pega o ID da playlist de uploads do canal (é um "UU..." derivado do "UC...").
-// Faz 1 chamada só; poderíamos até calcular trocando UC->UU, mas assim é à prova de mudanças da API.
-async function getUploadsPlaylistId(channelId) {
+// Pega o ID da playlist de uploads do canal (é um "UU..." derivado do "UC...")
+// e o avatar do canal, numa chamada só (mesmo custo de quota, part extra é de graça).
+async function getChannelInfo(channelId) {
   const url = new URL("https://www.googleapis.com/youtube/v3/channels");
-  url.searchParams.set("part", "contentDetails");
+  url.searchParams.set("part", "contentDetails,snippet");
   url.searchParams.set("id", channelId);
   url.searchParams.set("key", YOUTUBE_API_KEY);
 
@@ -55,7 +55,10 @@ async function getUploadsPlaylistId(channelId) {
   const data = await res.json();
   const item = data.items?.[0];
   if (!item) throw new Error(`Canal não encontrado: ${channelId}`);
-  return item.contentDetails.relatedPlaylists.uploads;
+  return {
+    uploadsPlaylistId: item.contentDetails.relatedPlaylists.uploads,
+    channelAvatarUrl: item.snippet.thumbnails?.default?.url,
+  };
 }
 
 async function getLatestUpload(playlistId) {
@@ -74,22 +77,44 @@ async function getLatestUpload(playlistId) {
   const item = data.items?.[0];
   if (!item) return null;
 
+  const thumb = item.snippet.thumbnails || {};
   return {
     videoId: item.contentDetails.videoId,
     title: item.snippet.title,
     publishedAt: item.contentDetails.videoPublishedAt || item.snippet.publishedAt,
     channelTitle: item.snippet.channelTitle,
+    thumbnailUrl: thumb.maxres?.url || thumb.high?.url || thumb.medium?.url || thumb.default?.url,
   };
 }
 
-async function postToDiscord(video) {
+// Cor de acento "Sakura" do guia de identidade visual (#F2A6C0).
+const EMBED_COLOR = 0xf2a6c0;
+
+async function postToDiscord(video, channelAvatarUrl) {
   const link = `https://youtu.be/${video.videoId}`;
-  const content = `${DISCORD_MESSAGE_PREFIX}\n**${video.title}**\n${link}`;
+
+  const payload = {
+    content: DISCORD_MESSAGE_PREFIX,
+    embeds: [
+      {
+        title: video.title,
+        url: link,
+        color: EMBED_COLOR,
+        image: video.thumbnailUrl ? { url: video.thumbnailUrl } : undefined,
+        author: {
+          name: video.channelTitle,
+          url: `https://www.youtube.com/channel/${YOUTUBE_CHANNEL_ID}`,
+          icon_url: channelAvatarUrl,
+        },
+        timestamp: video.publishedAt,
+      },
+    ],
+  };
 
   const res = await fetch(DISCORD_WEBHOOK_URL_VIDEOS, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
@@ -102,8 +127,8 @@ async function main() {
   requireEnv();
   console.log(`[${new Date().toISOString()}] Iniciando verificação...`);
 
-  const playlistId = await getUploadsPlaylistId(YOUTUBE_CHANNEL_ID);
-  const latest = await getLatestUpload(playlistId);
+  const { uploadsPlaylistId, channelAvatarUrl } = await getChannelInfo(YOUTUBE_CHANNEL_ID);
+  const latest = await getLatestUpload(uploadsPlaylistId);
   if (!latest) {
     console.log("Nenhum vídeo encontrado no canal.");
     return;
@@ -125,7 +150,7 @@ async function main() {
   }
 
   console.log("Vídeo novo detectado — enviando pro Discord...");
-  await postToDiscord(latest);
+  await postToDiscord(latest, channelAvatarUrl);
   await saveState({ videoId: latest.videoId, seenAt: new Date().toISOString() });
   console.log("Notificação enviada e estado atualizado.");
 }

@@ -115,7 +115,11 @@ async function main() {
     }
     case "list-roles": {
       const roles = await listRoles();
-      console.table(roles.map((r) => ({ id: r.id, name: r.name, color: r.color.toString(16) })));
+      console.table(
+        roles
+          .map((r) => ({ id: r.id, name: r.name, color: r.color.toString(16), position: r.position }))
+          .sort((a, b) => b.position - a.position)
+      );
       break;
     }
     case "create-channel": {
@@ -178,6 +182,14 @@ async function main() {
       const dataUri = `data:${mime};base64,${buffer.toString("base64")}`;
       await setWebhookAvatar(webhookId, dataUri);
       console.log(`Avatar do webhook ${webhookId} atualizado.`);
+      break;
+    }
+    case "set-role-color": {
+      const [roleId, hex] = args;
+      if (!roleId || !hex) throw new Error("Uso: set-role-color <roleId> <hexSemAlmofadinha>");
+      const color = parseInt(hex.replace(/^#/, ""), 16);
+      const role = await setRoleColor(roleId, color);
+      console.log(`Cargo ${role.name} -> #${hex.replace(/^#/, "")}`);
       break;
     }
     case "set-position": {
