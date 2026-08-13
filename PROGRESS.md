@@ -97,6 +97,9 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Guia de apresentação (2026-08-13)
+- [x] `apresente-se` continua liberado pra digitação (não estava no pedido de somente-leitura) — postado guia com modelo em bloco de código (copia-e-cola) + exemplo preenchido, fixado no canal
+
 ## Checklist — Canal de Vistos / Imigração (2026-08-13)
 - [x] Documento HTML do user ("mapa-dos-vistos.html", 7 grupos de visto com fontes oficiais) publicado como Artifact, com fontes customizadas (Zen Kaku Gothic New, IBM Plex Mono, IBM Plex Sans) embutidas em base64 pra preservar o visual original — decisão: linkar em vez de recriar em embeds nativos, pra não perder a tipografia/design já feito
 - [x] Categoria `IMIGRAÇÃO` + canal `「🎫」vistos` criados
