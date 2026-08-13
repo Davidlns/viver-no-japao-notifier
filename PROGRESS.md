@@ -1,0 +1,89 @@
+# Progress Log
+
+Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md).
+
+## Status geral
+**Fase atual:** Task #1 e #8 concluídas. Estrutura de canais revisada (2026-08-13): vídeo e notícia separados em canais diferentes, categoria `INFORMAÇÕES` movida pro topo do servidor. Bot rewired e retestado com sucesso no canal certo.
+
+## Checklist — Reestruturação de canais (2026-08-13)
+- [x] Canal `#🎥-vídeos-novos` criado dentro de `INFORMAÇÕES` (id `1537298557856649286`)
+- [x] Categoria `INFORMAÇÕES` reposicionada pro topo (posição 0, acima de tudo exceto Canais de Texto/Voz padrão — user confirmou que está ótimo assim)
+- [x] Dentro da categoria: `#🎥-vídeos-novos` antes de `#📰-notícias` (destaque)
+- [x] Post de teste antigo apagado de `#📰-notícias` (mensagem `1537297644282449970`, via `admin/discord-admin.js delete-message`)
+- [x] Webhook novo criado pro canal de vídeos (`DISCORD_WEBHOOK_URL_VIDEOS`)
+- [x] Webhook antigo renomeado na intenção pra `DISCORD_WEBHOOK_URL_NEWS` (reservado pros checkers de notícia futuros)
+- [x] `index.js` atualizado pra usar `DISCORD_WEBHOOK_URL_VIDEOS`
+- [x] `.env`, `.env.example`, `README.md` atualizados com as novas variáveis
+- [x] Reteste completo: vídeo simulado postou corretamente em `#🎥-vídeos-novos`
+- [x] Estado (`last_video.json`) resetado pro ID real após os testes
+
+**Nota técnica:** tentativa de reordenar outras categorias (`Comece aqui`, `Por momento`, etc.) deu 403 — são categorias privadas com cadeado, bot não tem acesso de visualização nelas. Não era necessário mesmo; a posição final ficou boa sem mexer nelas.
+
+## Checklist — Avatar customizado do webhook de vídeos
+- [x] Comando `set-webhook-avatar` adicionado ao `admin/discord-admin.js` (lê arquivo local, converte pra base64, PATCH `/webhooks/{id}`)
+- [x] Avatar aplicado no webhook `Bot Vídeos` a partir de `D:\Users\David Lins\Downloads\avatar.png`
+- [x] Confirmado via API que o hash do avatar foi salvo
+- [x] Validado visualmente após reload do cliente Discord (era cache local, resolvido com Ctrl+R)
+
+## Checklist — Setup do bot YouTube notifier
+
+- [x] Estrutura do projeto criada (`index.js`, `package.json`, `.env.example`, `.gitignore`, `README.md`)
+- [x] `npm install` rodado localmente — só `dotenv` instalado, 0 vulnerabilidades
+- [x] Channel ID do YouTube encontrado: `UC1J-WP24znzMGxPYtB_HvUw` (canal "Bruno Tesser", `@brunotesserjapao`) — achado via scraping do HTML público + confirmado batendo contra o RSS feed público do canal (não precisou de API key)
+- [x] **Discord:** canal `📰-notícias` criado — via `admin/discord-admin.js create-channel`, dentro da categoria `INFORMAÇÕES` (id `1537292819218173962`)
+- [x] **Discord:** webhook criado nesse canal — via `admin/discord-admin.js create-webhook`, salvo direto em `.env` (`DISCORD_WEBHOOK_URL`), sem precisar de clique manual
+- [x] **Google Cloud:** projeto criado (`discord-notifier`)
+- [x] **Google Cloud:** YouTube Data API v3 ativada
+- [x] **Google Cloud:** API Key gerada e restrita à YouTube Data API v3 (39 chars, formato `AIzaSy...`)
+- [x] `.env` preenchido: `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, `DISCORD_BOT_TOKEN`, `DISCORD_GUILD_ID`, `DISCORD_WEBHOOK_URL`
+- [x] Teste local `node index.js` validado — primeiro run detectou vídeo e salvou estado sem notificar, conforme especificado
+- [x] Teste end-to-end do webhook validado — simulei estado antigo, rodou de novo, postou no `#📰-notícias` com sucesso
+- [ ] Deploy em Railway ou Render configurado
+- [ ] Cron configurado (a cada ~15min)
+
+**Task #1 (Finalizar setup do YouTube notifier): CONCLUÍDA.**
+
+## Próximo passo imediato
+Retomar Google Cloud: criar projeto, ativar YouTube Data API v3, gerar API Key restrita, colar em `YOUTUBE_API_KEY` no `.env`. Depois disso, rodar `node index.js` local pra validar o notifier (primeiro run: só salva estado, sem notificar).
+
+## Checklist — Discord Bot de administração (Task #8)
+- [x] Application criada no Developer Portal (`Viver no Japão - Admin`)
+- [x] Bot user criado (nome: ミライ / Mirai)
+- [x] Bot público desligado, Privileged Gateway Intents todos desativados
+- [x] Permissões configuradas: Gerenciar servidor, Gerenciar cargos, Gerenciar canais, Alterar apelido, Gerenciar expressões, Ver canais, Enviar mensagens, Gerenciar mensagens, Fixar mensagens, Anexar arquivos, Ver histórico de mensagens, Usar emojis/figurinhas externas, Adicionar reações (permissions integer `2251938662296688`)
+- [x] Token gerado e copiado pelo user
+- [x] Bot convidado e autorizado no servidor "Viver no Japão - Comunidade" via OAuth2 URL Generator
+- [x] Token colado no `.env` local
+- [x] Guild ID resolvido via API (`list-guilds`, sem precisar de Modo Desenvolvedor): `1536904031509807305`
+- [x] `admin/discord-admin.js` escrito — CLI com `list-guilds`, `list-channels`, `list-roles`, `create-channel`, `rename-channel`
+- [x] Primeira ação testada: categoria `INFORMAÇÕES` (`1537292819218173962`) e canal `#📰-notícias` (`1537292839917191258`) criados via CLI
+- [x] Permissão "Gerenciar Webhooks" adicionada ao cargo do bot (ajuste manual pós-convite, sem precisar regerar OAuth link)
+- [x] Webhook do canal `#📰-notícias` criado via CLI (`create-webhook`) e salvo em `.env`
+
+## Decisões/eventos registrados durante a execução
+- Channel ID resolvido sem precisar de API key: fiz scraping do HTML da página `youtube.com/@brunotesserjapao`, extraí `externalId`, e confirmei contra o RSS público (`youtube.com/feeds/videos.xml?channel_id=...`), que mostrou o vídeo mais recente do canal certo.
+
+---
+
+## Checklist — Balde 1 (Bot, código) — visão macro
+- [ ] #1 Setup YouTube notifier (detalhado acima)
+- [ ] #2 Refatorar mensagem YouTube pra embed colorido
+- [ ] #3 Refatorar repo pra múltiplos checkers (`checkers/`, `lib/`, `state.json`)
+- [ ] #4 Checker NHK World PT
+- [ ] #5 Checker Portal Mie
+- [ ] #6 Deploy com cron
+
+## Checklist — Balde 2 (Config Discord, manual/automatizável) — visão macro
+- [x] Permissões concedidas ao user (Webhooks, Canais, Mensagens, Emojis, Cargos, Servidor)
+- [x] (a) Canal `📰-notícias` criado
+- [ ] (b) Canais renomeados com emoji
+- [ ] (c) Paleta de cores dos cargos definida
+- [ ] (d) Mensagens fixadas por canal (embed com imagem/gif — equivalente ao "banner por canal" pedido)
+- [ ] (e) Ícone/banner do servidor
+- [ ] (f) Emojis customizados
+- [ ] (g) Paleta geral / tema de cor do servidor
+
+## Checklist — Balde 3 (bots terceiros) — backlog, fora do sprint 1
+- [ ] Sesh/Apollo (eventos)
+- [ ] Statbot (contadores)
+- [ ] Carl-bot/YAGPDB (welcome + reaction roles)

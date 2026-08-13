@@ -1,0 +1,16 @@
+{
+  "name": "youtube-discord-notifier",
+  "version": "1.0.0",
+  "description": "Polling bot que avisa no Discord quando o canal do YouTube posta um vídeo novo",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
