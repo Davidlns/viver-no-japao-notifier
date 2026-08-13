@@ -85,6 +85,10 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Ícone aplicado ao servidor via `setServerIcon` (novo em `admin/discord-admin.js`)
 - [ ] Banner — pendente até o servidor atingir boost nível 2
 
+## Checklist — Lista de membros agrupada por cargo (2026-08-13)
+- [x] `hoist` ativado nos 4 cargos (Equipe, Senpai, Membro, Visitante) — lista de membros agora agrupa por cargo em vez de só Disponível/Offline, no estilo do exemplo externo
+- [ ] Emoji/ícone ao lado do nome do cargo — **bloqueado**, também exige boost (nível 1), descoberto ao tentar. Documentado junto com banner (nível 2) como pendências que dependem só de boost, não de permissão.
+
 **Balde 2 (config visual): essencialmente completo.** Todos os 26 canais/categorias renomeados, todos os canais de texto com pin, 4 cargos com cor, 6 emojis customizados, ícone do servidor. Só falta o banner (bloqueado por boost) e possível expansão de hierarquia de cargo (descartada por enquanto).
 - [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 

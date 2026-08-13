@@ -129,6 +129,20 @@ export function setRoleColor(roleId, color, guildId = DISCORD_GUILD_ID) {
   });
 }
 
+export function setRoleHoist(roleId, hoist, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/roles/${roleId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ hoist }),
+  });
+}
+
+export function setRoleEmoji(roleId, unicodeEmoji, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/roles/${roleId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ unicode_emoji: unicodeEmoji }),
+  });
+}
+
 // --- CLI ---
 const [, , command, ...args] = process.argv;
 
