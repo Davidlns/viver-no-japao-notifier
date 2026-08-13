@@ -50,6 +50,13 @@ export function renameChannel(channelId, name) {
   });
 }
 
+export function editMessage(channelId, messageId, payload) {
+  return discordFetch(`/channels/${channelId}/messages/${messageId}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function createMessage(channelId, payload) {
   return discordFetch(`/channels/${channelId}/messages`, {
     method: "POST",

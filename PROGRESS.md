@@ -97,6 +97,11 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Remoção de "Bem-vindo" dos títulos fixados (2026-08-13)
+- [x] Novo comando `editMessage` no admin CLI (edita mensagem existente sem precisar apagar/recriar, mantém o pin)
+- [x] Identificados os 2 únicos canais com "Bem-vindo(a)" no título (`geral`, `leia-primeiro`) — os demais já não usavam essa palavra
+- [x] Títulos trocados pra só o nome do canal: `💬 Geral`, `📖 Leia Primeiro` — corpo do texto mantido
+
 ## Checklist — Guia de apresentação (2026-08-13)
 - [x] `apresente-se` continua liberado pra digitação (não estava no pedido de somente-leitura) — postado guia com modelo em bloco de código (copia-e-cola) + exemplo preenchido, fixado no canal
 - [x] Limpeza: apagadas as mensagens anteriores (incluindo uma do dono), mantida só a mensagem do guia fixada
