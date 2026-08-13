@@ -1,3 +1,4 @@
+# Checa o canal do YouTube a cada 15min e notifica no Discord se houver vídeo novo.
 name: YouTube Notifier
 
 on:
