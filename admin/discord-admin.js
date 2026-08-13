@@ -118,6 +118,14 @@ export function createWebhook(channelId, name) {
   });
 }
 
+export function listMembers(guildId = DISCORD_GUILD_ID, limit = 1000) {
+  return discordFetch(`/guilds/${guildId}/members?limit=${limit}`);
+}
+
+export function addRoleToMember(userId, roleId, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/members/${userId}/roles/${roleId}`, { method: "PUT" });
+}
+
 export function listRoles(guildId = DISCORD_GUILD_ID) {
   return discordFetch(`/guilds/${guildId}/roles`);
 }

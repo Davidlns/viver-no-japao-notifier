@@ -85,6 +85,11 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Ícone aplicado ao servidor via `setServerIcon` (novo em `admin/discord-admin.js`)
 - [ ] Banner — pendente até o servidor atingir boost nível 2
 
+## Checklist — Atribuição de cargo faltante (2026-08-13)
+- [x] Server Members Intent ativado no Developer Portal (necessário pra listar membros via API)
+- [x] Checados os 10 membros do servidor: só `tarcizo` estava sem nenhum dos 4 cargos — atribuído `🌸 Membro`
+- [x] Esclarecido: membros offline sempre aparecem numa lista única sem agrupar por cargo — comportamento nativo do Discord, não é bug nem falta de configuração nossa
+
 ## Checklist — Lista de membros agrupada por cargo (2026-08-13)
 - [x] `hoist` ativado nos 4 cargos (Equipe, Senpai, Membro, Visitante) — lista de membros agora agrupa por cargo em vez de só Disponível/Offline, no estilo do exemplo externo
 - [x] Emoji nos cargos, resolvido sem boost: emoji direto no **nome** do cargo (não o recurso "ícone de cargo" que é boost-gated) — `⛩️ Equipe`, `🎓 Senpai`, `🌸 Membro`, `🍃 Visitante`
