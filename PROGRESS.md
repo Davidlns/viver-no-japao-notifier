@@ -92,6 +92,12 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Comunidade confirmada ativa via API: `features: ['COMMUNITY', 'NEWS']`, `rules_channel_id` = regras-e-cultura, `public_updates_channel_id` = avisos
 - [x] Tela de Boas-vindas configurada via API (`setWelcomeScreen`): descrição + 2 canais em destaque (`📖 leia-primeiro`, `📜 regras-e-cultura`)
 
+## Checklist — Canal de Vistos / Imigração (2026-08-13)
+- [x] Documento HTML do user ("mapa-dos-vistos.html", 7 grupos de visto com fontes oficiais) publicado como Artifact, com fontes customizadas (Zen Kaku Gothic New, IBM Plex Mono, IBM Plex Sans) embutidas em base64 pra preservar o visual original — decisão: linkar em vez de recriar em embeds nativos, pra não perder a tipografia/design já feito
+- [x] Categoria `IMIGRAÇÃO` + canal `「🎫」vistos` criados
+- [x] Canal somente leitura: nega "Enviar Mensagens" pro `@everyone`, com exceção explícita pro cargo do bot (senão o próprio bot fica bloqueado também — pegadinha aprendida na hora)
+- [x] Mensagem fixada com resumo dos 7 grupos + link pro mapa completo, incluindo aviso de que parte do conteúdo (Working Holiday, reforma TIT) ainda está em revisão, herdado do rodapé do documento original
+
 ## Checklist — Onboarding com cargo automático (2026-08-13)
 - [x] Confirmado: recurso nativo de Onboarding do Discord (parte de Comunidade), sem precisar de bot 24/7 pra reaction/button roles
 - [x] Prompt configurado via `PUT /guilds/{id}/onboarding`: "Qual sua situação hoje?" com 2 opções — `🤔 Ainda decidindo` → cargo Visitante, `🌸 Já moro ou já decidi vir` → cargo Membro
