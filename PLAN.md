@@ -54,13 +54,18 @@ Servidor do amigo. Sprint 1 focado em: (1) bot de notificações, (2) polimento 
 - **Statbot** — contadores dinâmicos (X membros online)
 - **Carl-bot / YAGPDB** — welcome message automática, reaction roles (usuário clica em emoji pra pegar cargo)
 
-## Fontes de notícias — detalhes técnicos
+## Fontes de notícias — investigação e decisão final (2026-08-13)
 
-| Fonte | URL | RSS? | Estratégia |
-|---|---|---|---|
-| NHK World Portuguese | `www3.nhk.or.jp/nhkworld/pt/rss/index.xml` | ✅ | Consumo direto do RSS |
-| Portal Mie | `portalmie.com` | ❓ a confirmar | RSS se tiver / scraping da home com cheerio se não |
-| Imigração Japão (出入国在留管理庁) | site oficial | ❌ | **Adiado pra sprint 2** — sem RSS, scraping frágil |
+| Fonte | Resultado da investigação |
+|---|---|
+| NHK World Portuguese | ❌ **Sem RSS público.** Site é um app React que busca conteúdo via API GraphQL interna, não documentada. Reverse engineering possível mas desproporcional pro escopo. |
+| Portal Mie | ❌ **Bloqueado por Cloudflare** (`Cf-Mitigated: challenge`, desafio anti-bot ativo). Contornar isso é bypass de anti-bot — fora dos limites do que faço, independente de viabilidade técnica. |
+| Alternativa Online (`alternativa.co.jp`) | ❌ Feed em `/feed/` devolve HTML, não XML — RSS quebrado/desativado. |
+| IPC Digital (`ipcdigital.com`) | ❌ Domínio ativo mas conteúdo sem relação (blog de tecnologia genérico). |
+| **Revista Alternativa** (`revistaalternativa.jp`) | ✅ **RSS válido e funcional** — WordPress padrão, `pt-BR`, conteúdo atualizado. Fonte escolhida. |
+| Imigração Japão (出入国在留管理庁) | Não investigado ainda — adiado pra sprint 2 se houver demanda. |
+
+**Checker único de notícias** (`checkers/news.js`) consumindo `https://revistaalternativa.jp/feed/`. Curiosamente bate com o "ou alternativa" que o user mencionou no pedido original — existe uma publicação real com esse nome, focada exatamente no público certo (comunidade brasileira no Japão).
 
 ## Passos manuais que dependem do user
 
@@ -73,25 +78,25 @@ Servidor do amigo. Sprint 1 focado em: (1) bot de notificações, (2) polimento 
 
 Progresso detalhado, passo a passo, fica em [`PROGRESS.md`](./PROGRESS.md) — atualizado a cada etapa concluída.
 
-## Arquitetura alvo (pós-refactor)
+## Arquitetura (implementada, 2026-08-13)
 
 ```
-index.js              → orquestrador: chama todos os checkers em paralelo
+index.js              → orquestrador: chama todos os checkers em paralelo (Promise.allSettled)
 checkers/
-  youtube.js          → polling YouTube API
-  nhk.js              → polling RSS NHK PT
-  portalmie.js        → polling Portal Mie
+  youtube.js          → polling YouTube Data API v3
+  news.js             → polling RSS da Revista Alternativa
 lib/
-  discord.js          → helper de post no webhook (embed builder)
-  state.js            → load/save state.json
-state.json            → { youtube: {lastId, ...}, nhk: {lastId, ...}, portalmie: {...} }
+  discord.js          → postEmbed(webhookUrl, embed, content)
+  state.js            → loadState/saveState genéricos
+state.json            → { youtube: {videoId, seenAt}, news: {guid, seenAt} }
 
 admin/                → scripts de administração via Discord Bot API (rodados sob demanda, não em cron)
-  discord-admin.js     → client REST fino (fetch) com funções: createChannel, renameChannel,
-                          pinMessage, setRoleColor, uploadEmoji, setServerIcon, setServerBanner
+  discord-admin.js     → CLI com fetch puro: create-channel, create-category, rename-channel,
+                          set-position, set-role-color, create-webhook, set-webhook-avatar,
+                          list-messages, delete-message, list-guilds/channels/roles
 ```
 
-Um cron único chama `node index.js` pro bot de notificações; cada checker é independente (falha de um não derruba os outros). O `admin/` é separado — roda local, sob comando pontual, nunca em cron.
+Um cron único (GitHub Actions, `.github/workflows/notify.yml`) chama `node index.js`; cada checker é independente. O `admin/` é separado — roda local, sob comando pontual, nunca em cron.
 
 ## Custos previstos
 - **YouTube API:** ~2 unidades de quota por run. Limite gratuito: 10.000/dia. Rodar de 15 em 15min = 192/dia. Folgado.

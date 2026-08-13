@@ -1,5 +1,5 @@
-# Checa o canal do YouTube a cada 15min e notifica no Discord se houver vídeo novo.
-name: YouTube Notifier
+# Roda os checkers (YouTube + notícias) a cada 15min e notifica no Discord se houver novidade.
+name: Notifier
 
 on:
   schedule:
@@ -30,15 +30,16 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
           DISCORD_WEBHOOK_URL_VIDEOS: ${{ secrets.DISCORD_WEBHOOK_URL_VIDEOS }}
+          DISCORD_WEBHOOK_URL_NEWS: ${{ secrets.DISCORD_WEBHOOK_URL_NEWS }}
 
       - name: Commit estado atualizado (se mudou)
         run: |
-          if ! git diff --quiet -- last_video.json; then
+          if ! git diff --quiet -- state.json; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add last_video.json
-            git commit -m "chore: atualiza last_video.json [skip ci]"
+            git add state.json
+            git commit -m "chore: atualiza state.json [skip ci]"
             git push
           else
-            echo "Nenhuma mudança em last_video.json"
+            echo "Nenhuma mudança em state.json"
           fi

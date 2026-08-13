@@ -3,7 +3,23 @@
 Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md).
 
 ## Status geral
-**Fase atual:** Task #1 e #8 concluídas. Estrutura de canais revisada (2026-08-13): vídeo e notícia separados em canais diferentes, categoria `INFORMAÇÕES` movida pro topo do servidor. Bot rewired e retestado com sucesso no canal certo.
+**Fase atual:** Tasks #1, #2, #3, #6, #8 concluídas. Bot multi-checker (YouTube + notícias da Revista Alternativa) rodando em produção via GitHub Actions. Falta: cor do cargo Equipe (bloqueado, aguardando dono do servidor), emoji nos canais restantes (bloqueado, categorias privadas), mensagens fixadas, emojis customizados.
+
+## Checklist — Refactor multi-checker + checker de notícias (Tasks #3/#4/#5)
+- [x] Investigação de fontes: NHK sem RSS (API GraphQL não documentada), Portal Mie bloqueado por Cloudflare (não contornado, é linha rígida), Alternativa Online com feed quebrado, IPC Digital domínio errado
+- [x] Fonte escolhida: **Revista Alternativa** (`revistaalternativa.jp/feed/`) — RSS WordPress padrão válido, `pt-BR`
+- [x] Dependência `fast-xml-parser` adicionada (parsing de RSS)
+- [x] `lib/state.js` e `lib/discord.js` criados (helpers compartilhados)
+- [x] `checkers/youtube.js` — lógica movida de `index.js`, mesma interface `check(previousState)`
+- [x] `checkers/news.js` — novo checker: busca RSS, limpa o excerpt (remove boilerplate "O post... apareceu primeiro em..." que o WordPress injeta), extrai categoria, cor coral (`#F2947C`) diferenciando de vídeo (sakura `#F2A6C0`)
+- [x] `index.js` reescrito como orquestrador — roda os 2 checkers com `Promise.allSettled` (falha de um não derruba o outro)
+- [x] Migração de estado: `last_video.json` → `state.json` com chaves por fonte (`youtube`, `news`)
+- [x] Teste local completo: primeiro run do checker de notícia (sem notificar) + teste de notícia nova (postou certo, com categoria no rodapé)
+- [x] Workflow do GitHub Actions atualizado: novo nome (`Notifier`), env `DISCORD_WEBHOOK_URL_NEWS`, commit-back de `state.json` em vez de `last_video.json`
+- [x] Secret `DISCORD_WEBHOOK_URL_NEWS` adicionado no GitHub Actions
+- [x] README.md reescrito refletindo a arquitetura nova
+
+**Tasks #3 e #4 concluídas** (repurpose: NHK virou Revista Alternativa). **Task #5 (Portal Mie) abandonada** — bloqueio de Cloudflare não é contornável dentro das minhas regras.
 
 ## Checklist — Reestruturação de canais (2026-08-13)
 - [x] Canal `#🎥-vídeos-novos` criado dentro de `INFORMAÇÕES` (id `1537298557856649286`)

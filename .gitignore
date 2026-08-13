@@ -3,6 +3,7 @@ node_modules/
 *.log
 .DS_Store
 
-# last_video.json É versionado de propósito: o GitHub Actions não tem disco
+# state.json É versionado de propósito: o GitHub Actions não tem disco
 # persistente entre execuções, então o workflow commita esse arquivo de volta
-# a cada run pra "lembrar" o último vídeo notificado. Não contém dado sensível.
+# a cada run pra "lembrar" o último item notificado de cada fonte. Não contém
+# dado sensível (só IDs de vídeo/post e timestamps).
