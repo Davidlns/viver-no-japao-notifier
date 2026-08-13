@@ -97,6 +97,14 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Checker de Community Post do YouTube (2026-08-13)
+- [x] Confirmado: YouTube Data API v3 não tem endpoint pra Community Post — nunca teve
+- [x] Scraping do `ytInitialData` embutido no HTML público da aba Comunidade — técnica comum, sem contornar proteção anti-bot (diferente do caso Portal Mie/Cloudflare)
+- [x] `checkers/community.js` criado: extrai postId, texto, imagem, link (`youtube.com/post/{id}`)
+- [x] Canal `「📮」comunidade-yt` + webhook criados dentro de `INFORMAÇÕES`
+- [x] Testado local: primeiro run + post forçado, confirmado post real do Bruno Tesser (pizza) apareceu certinho no Discord
+- [x] Sincronizado com deploy: `DISCORD_WEBHOOK_URL_COMMUNITY` como secret, workflow atualizado
+
 ## Checklist — Remoção de "Bem-vindo" dos títulos fixados (2026-08-13)
 - [x] Novo comando `editMessage` no admin CLI (edita mensagem existente sem precisar apagar/recriar, mantém o pin)
 - [x] Identificados os 2 únicos canais com "Bem-vindo(a)" no título (`geral`, `leia-primeiro`) — os demais já não usavam essa palavra

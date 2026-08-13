@@ -4,6 +4,7 @@ import "dotenv/config";
 import { loadState, saveState } from "./lib/state.js";
 import * as youtube from "./checkers/youtube.js";
 import * as news from "./checkers/news.js";
+import * as community from "./checkers/community.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STATE_PATH = path.resolve(__dirname, process.env.STATE_FILE || "state.json");
@@ -11,6 +12,7 @@ const STATE_PATH = path.resolve(__dirname, process.env.STATE_FILE || "state.json
 const CHECKERS = [
   { key: "youtube", run: youtube.check },
   { key: "news", run: news.check },
+  { key: "community", run: community.check },
 ];
 
 async function main() {

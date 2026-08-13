@@ -32,6 +32,7 @@ jobs:
           DISCORD_WEBHOOK_URL_VIDEOS: ${{ secrets.DISCORD_WEBHOOK_URL_VIDEOS }}
           DISCORD_WEBHOOK_URL_NEWS: ${{ secrets.DISCORD_WEBHOOK_URL_NEWS }}
           DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+          DISCORD_WEBHOOK_URL_COMMUNITY: ${{ secrets.DISCORD_WEBHOOK_URL_COMMUNITY }}
 
       - name: Commit estado atualizado (se mudou)
         run: |

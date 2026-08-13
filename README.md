@@ -41,6 +41,7 @@ node index.js
 | `DISCORD_WEBHOOK_URL_VIDEOS` | sim | URL do webhook do canal `#🎥-vídeos-novos` |
 | `DISCORD_WEBHOOK_URL_NEWS` | sim | URL do webhook do canal `#📰-notícias` |
 | `DEEPL_API_KEY` | sim | API Key da DeepL (plano Free, sufixo `:fx`) — traduz notícias do japonês |
+| `DISCORD_WEBHOOK_URL_COMMUNITY` | sim | URL do webhook do canal `#「📮」comunidade-yt` |
 | `DISCORD_MESSAGE_PREFIX` | não | Texto antes do embed de vídeo. Default: `Vídeo novo no ar!` |
 | `DISCORD_NEWS_PREFIX` | não | Texto antes do embed de notícia. Default: `Notícia nova!` |
 | `STATE_FILE` | não | Path do arquivo de estado. Default: `state.json` |
@@ -52,6 +53,9 @@ Polling na YouTube Data API v3 (`channels` + `playlistItems`, ~2 unidades de quo
 
 ### `checkers/news.js`
 Consome o RSS da **NHK doméstica** (`www3.nhk.or.jp/rss/news/cat0.xml`, japonês, notícia dura de verdade) e traduz título + descrição pro português via **DeepL API Free** (500 mil caracteres/mês grátis, nunca expira).
+
+### `checkers/community.js`
+Sem API oficial pra Community Post do YouTube — extrai do `ytInitialData` embutido no HTML público da aba Comunidade do canal (`/channel/{id}/community`). Frágil a mudanças de estrutura de página (mesma categoria de risco que a fonte de notícias original), mas não contorna nenhuma proteção anti-bot.
 
 **Fontes descartadas nessa investigação:**
 - NHK World Português — sem RSS público (app React com API GraphQL interna não documentada)
