@@ -97,6 +97,14 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Backfill dos últimos 3 vídeos + 3 posts de comunidade (2026-08-13)
+- [x] Canais limpos (incluindo mensagens do dono, a pedido explícito) antes do backfill
+- [x] 3 últimos vídeos postados em ordem cronológica em `「🎥」vídeos-novos`
+- [x] Descoberta técnica: community post tem só 1 item na primeira carga da página, mas existe **paginação via token de continuação** (`youtubei/v1/browse`) — usada pra buscar os 14 posts históricos disponíveis e pegar os 3 mais recentes de verdade
+- [x] 3 últimos posts de comunidade postados em ordem cronológica em `「📮」comunidade-yt`
+- [x] Mensagem fixada criada em `comunidade-yt` (tinha ficado faltando na criação do canal, corrigido)
+- [x] `state.json` já consistente com os itens mais recentes — checker automático não vai duplicar no próximo run
+
 ## Checklist — Checker de Community Post do YouTube (2026-08-13)
 - [x] Confirmado: YouTube Data API v3 não tem endpoint pra Community Post — nunca teve
 - [x] Scraping do `ytInitialData` embutido no HTML público da aba Comunidade — técnica comum, sem contornar proteção anti-bot (diferente do caso Portal Mie/Cloudflare)
