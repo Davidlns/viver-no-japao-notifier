@@ -19,6 +19,27 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 
 **Nota técnica:** tentativa de reordenar outras categorias (`Comece aqui`, `Por momento`, etc.) deu 403 — são categorias privadas com cadeado, bot não tem acesso de visualização nelas. Não era necessário mesmo; a posição final ficou boa sem mexer nelas.
 
+## Checklist — Deploy (Task #6): GitHub Actions
+- [x] Correção de custo descoberta via pesquisa: Railway/Render não são mais gratuitos pra cron em 2026. Escolhido GitHub Actions (genuinamente grátis em repo público)
+- [x] `last_video.json` removido do `.gitignore` de propósito — precisa ser versionado pro workflow persistir estado entre execuções (sem dado sensível)
+- [x] `.github/workflows/notify.yml` criado: roda a cada 15min (`*/15 * * * *`) + `workflow_dispatch` pra disparo manual, commita `last_video.json` de volta se mudou
+- [x] Repositório público criado: [github.com/Davidlns/viver-no-japao-notifier](https://github.com/Davidlns/viver-no-japao-notifier)
+- [x] Scan de segurança: nenhum segredo vazado nos arquivos versionados (`.env` corretamente ignorado)
+- [x] Secrets configurados no GitHub Actions via `gh secret set`, direto do `.env` local, sem expor no chat: `YOUTUBE_API_KEY`, `YOUTUBE_CHANNEL_ID`, `DISCORD_WEBHOOK_URL_VIDEOS` (só o que o `index.js` precisa — token de admin fica só local)
+- [x] Troubleshooting: workflow não indexou no primeiro push (comum em repo recém-criado); resolvido com um commit que efetivamente modifica o arquivo do workflow, forçando o GitHub a reprocessar
+- [x] Teste manual (`workflow_dispatch`) rodou com sucesso: detectou o vídeo, comparou estado, corretamente disse "sem vídeo novo", sem precisar commitar
+
+**Task #6 (Deploy com cron): CONCLUÍDA.** Bot roda sozinho a cada 15min, sem depender do PC ligado.
+
+## Checklist — Identidade visual "Sakura Pastel" (Balde 2)
+- [x] Style guide aprovado pelo user (artefato: paleta, cargos, convenção de canais)
+- [x] Cor aplicada: `Senpai` → `#F2947C`, `Membro` → `#EFA0C3`, `Visitante` → `#C9A6DE`
+- [ ] Cor `Equipe` → `#C6547C` — **bloqueado**: cargo `Equipe` está acima do próprio David na hierarquia (cadeado no Discord), nem o dono das permissões consegue mexer, só o dono real do servidor (`noone`). Mensagem enviada pedindo pra mover o cargo do bot acima de `Equipe`. **Aguardando resposta do dono.**
+- [x] Task #2 concluída enquanto isso: embed colorido no bot de vídeos (thumbnail, cor Sakura `#F2A6C0`, avatar do canal, timestamp) — testado local e commitado
+- [ ] Emoji nos nomes de canais existentes (leia-primeiro, apresente-se, etc.) — bloqueado igual: essas categorias são privadas, bot não tem `View Channel` nelas (erro 403 "Missing Access" visto antes). Precisa de acesso extra ou o próprio David fazer manual.
+- [ ] Mensagens fixadas com imagem por canal
+- [ ] Emojis customizados
+
 ## Checklist — Avatar customizado do webhook de vídeos
 - [x] Comando `set-webhook-avatar` adicionado ao `admin/discord-admin.js` (lê arquivo local, converte pra base64, PATCH `/webhooks/{id}`)
 - [x] Avatar aplicado no webhook `Bot Vídeos` a partir de `D:\Users\David Lins\Downloads\avatar.png`
