@@ -136,6 +136,13 @@ export function setRoleHoist(roleId, hoist, guildId = DISCORD_GUILD_ID) {
   });
 }
 
+export function setRoleName(roleId, name, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/roles/${roleId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ name }),
+  });
+}
+
 export function setRoleEmoji(roleId, unicodeEmoji, guildId = DISCORD_GUILD_ID) {
   return discordFetch(`/guilds/${guildId}/roles/${roleId}`, {
     method: "PATCH",
