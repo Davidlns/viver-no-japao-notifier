@@ -66,8 +66,11 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [ ] Cor `Equipe` → `#C6547C` — **bloqueado**: cargo `Equipe` está acima do próprio David na hierarquia (cadeado no Discord), nem o dono das permissões consegue mexer, só o dono real do servidor (`noone`). Mensagem enviada pedindo pra mover o cargo do bot acima de `Equipe`. **Aguardando resposta do dono.**
 - [x] Task #2 concluída enquanto isso: embed colorido no bot de vídeos (thumbnail, cor Sakura `#F2A6C0`, avatar do canal, timestamp) — testado local e commitado
 - [ ] Emoji nos nomes de canais existentes (leia-primeiro, apresente-se, etc.) — bloqueado igual: essas categorias são privadas, bot não tem `View Channel` nelas (erro 403 "Missing Access" visto antes). Precisa de acesso extra ou o próprio David fazer manual.
-- [ ] Mensagens fixadas com imagem por canal
-- [ ] Emojis customizados
+- [x] Convenção de nome de canal revisada pra `「emoji」nome` (inspirada em exemplo externo de organização, não copiado — só a convenção de colchete japonês). Aplicado nos dois canais do bot: `「🎥」vídeos-novos`, `「📰」notícias`
+- [x] Mensagens de boas-vindas fixadas nos dois canais administrados pelo bot
+- [x] 6 emojis customizados subidos: `:sakura_sim:`, `:sakura_amei:`, `:fuji_nao:`, `:matcha_boa:`, `:coral_novo:`, `:senpai_top:`
+- [ ] Mensagens fixadas nos canais das categorias privadas (`leia-primeiro`, `apresente-se`, `desabafo` — texto já pronto, aguardando acesso)
+- [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 
 ## Checklist — Avatar customizado do webhook de vídeos
 - [x] Comando `set-webhook-avatar` adicionado ao `admin/discord-admin.js` (lê arquivo local, converte pra base64, PATCH `/webhooks/{id}`)
