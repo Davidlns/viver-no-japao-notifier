@@ -73,7 +73,12 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Todos os 17 canais/categorias acessíveis renomeados: canais no padrão `「emoji」nome`, categorias em CAIXA ALTA (sem emoji, mesmo padrão de `INFORMAÇÕES`)
 - [x] Mensagens fixadas em todos os 9 canais de texto acessíveis (geral, 4 fases com progressão de cor lavanda→sakura-deep ecoando a hierarquia de cargo, pergunte-a-hiyori, conquistas, desabafo, materiais)
 - [x] `「🗂️」arquivo-de-perguntas` (canal Fórum) — usa campo "diretrizes" (topic) em vez de pin, já que Fórum não aceita mensagem fixada tradicional
-- [ ] Mensagens fixadas nos 5 canais de `Comece aqui` (texto já pronto no mockup, aguardando acesso)
+- [x] **Acesso liberado pelo dono (2026-08-13):** categoria `Comece aqui` tinha overwrite explícito negando "Ver Canal" pro `@everyone`, cargo do bot não estava na exceção. Resolvido adicionando o cargo do bot na permissão da categoria + sincronizando os 5 canais filhos (channel-level overwrite, diferente do problema de hierarquia de cargo resolvido antes)
+- [x] Categoria renomeada: `COMECE AQUI`. 5 canais renomeados: `「📖」leia-primeiro`, `「📜」regras-e-cultura`, `「👋」apresente-se`, `「🧭」como-usar-a-comunidade`, `「📢」avisos`
+- [x] Mensagem fixada nos 5 — conteúdo genérico/seguro pra regras (não inventei texto de regra específica, só reforço + aponta pra Equipe)
+- [x] Cor do cargo `Equipe` aplicada (`#C6547C`) — desbloqueada quando o dono moveu o cargo do bot acima na hierarquia
+
+**Balde 2 (config visual): essencialmente completo.** Todos os 26 canais/categorias renomeados, todos os canais de texto com pin, 4 cargos com cor, 6 emojis customizados. Resta só: ícone/banner do servidor (não pedido ainda) e possível expansão de hierarquia de cargo (descartada por enquanto).
 - [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 
 ## Checklist — Avatar customizado do webhook de vídeos
