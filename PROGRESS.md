@@ -69,7 +69,10 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Convenção de nome de canal revisada pra `「emoji」nome` (inspirada em exemplo externo de organização, não copiado — só a convenção de colchete japonês). Aplicado nos dois canais do bot: `「🎥」vídeos-novos`, `「📰」notícias`
 - [x] Mensagens de boas-vindas fixadas nos dois canais administrados pelo bot
 - [x] 6 emojis customizados subidos: `:sakura_sim:`, `:sakura_amei:`, `:fuji_nao:`, `:matcha_boa:`, `:coral_novo:`, `:senpai_top:`
-- [ ] Mensagens fixadas nos canais das categorias privadas (`leia-primeiro`, `apresente-se`, `desabafo` — texto já pronto, aguardando acesso)
+- [x] **Mapeamento de acesso real do bot** (2026-08-13): testado com rename no-op em todos os 26 canais/categorias — só a categoria `Comece aqui` (+ 5 canais dentro: leia-primeiro, regras-e-cultura, apresente-se, como-usar-a-comunidade, avisos) está bloqueada. Todo o resto (17 itens) o bot já alcançava, não precisava esperar o dono.
+- [x] Todos os 17 canais/categorias acessíveis renomeados: canais no padrão `「emoji」nome`, categorias em CAIXA ALTA (sem emoji, mesmo padrão de `INFORMAÇÕES`)
+- [ ] Mensagens fixadas nos canais recém-renomeados (fora dos 2 já feitos) — ainda não escrito, precisa de direção de conteúdo por canal
+- [ ] Mensagens fixadas nos 5 canais de `Comece aqui` (texto já pronto no mockup, aguardando acesso)
 - [ ] Hierarquia de cargos mais granular (Manager/Admin/Mod/Helper) — **descartado por enquanto**, comunidade pequena demais pra justificar
 
 ## Checklist — Avatar customizado do webhook de vídeos
