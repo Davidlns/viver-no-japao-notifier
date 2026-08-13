@@ -85,6 +85,13 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Ícone aplicado ao servidor via `setServerIcon` (novo em `admin/discord-admin.js`)
 - [ ] Banner — pendente até o servidor atingir boost nível 2
 
+## Checklist — Fluxo de boas-vindas pra novos membros (2026-08-13)
+- [x] Canal de sistema definido: `leia-primeiro` (mensagem nativa "Fulano entrou" aparece lá)
+- [x] Categoria `COMECE AQUI` movida pra posição 0 (primeira do servidor)
+- [x] Tentativa de ativar Comunidade via bot API: **403**, exige Administrador (permissão que o bot não tem de propósito) — feito manualmente pelo user/dono via assistente do próprio Discord
+- [x] Comunidade confirmada ativa via API: `features: ['COMMUNITY', 'NEWS']`, `rules_channel_id` = regras-e-cultura, `public_updates_channel_id` = avisos
+- [x] Tela de Boas-vindas configurada via API (`setWelcomeScreen`): descrição + 2 canais em destaque (`📖 leia-primeiro`, `📜 regras-e-cultura`)
+
 ## Checklist — Tópicos/descrição em todos os canais (2026-08-13)
 - [x] 16 canais de texto com descrição curta no topo (via `setChannelTopic`), reforçando o propósito de cada um sem precisar abrir o pin
 - [x] Esclarecido: seção "Offline" sem agrupamento por cargo é comportamento fixo do cliente Discord, sem contorno possível — mesma categoria de limitação que banner/emoji-de-cargo (boost)

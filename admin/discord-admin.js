@@ -61,6 +61,13 @@ export function pinMessage(channelId, messageId) {
   return discordFetch(`/channels/${channelId}/pins/${messageId}`, { method: "PUT" });
 }
 
+export function setWelcomeScreen(payload, guildId = DISCORD_GUILD_ID) {
+  return discordFetch(`/guilds/${guildId}/welcome-screen`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
 export function setChannelTopic(channelId, topic) {
   return discordFetch(`/channels/${channelId}`, {
     method: "PATCH",
