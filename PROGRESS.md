@@ -97,6 +97,19 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Bug: notificação duplicada no checker de comunidade (2026-08-15/16)
+- [x] User reportou "um monte de mensagem dos mesmos 2 posts" em `comunidade-yt`
+- [x] Investigado histórico de `state.json` via git log — não era problema de persistência (o commit automático estava funcionando certinho a cada run)
+- [x] Causa raiz: o feed de Community Post do YouTube **não é estável entre requisições** — a ordem dos posts recentes oscila entre ~6 IDs diferentes (provável cache de borda do YouTube), e a dedup por "só comparar com o último ID" disparava notificação toda vez que a ordem mudava
+- [x] Corrigido: `checkers/community.js` agora guarda os últimos 20 IDs vistos (`seenPostIds`) e checa presença em vez de igualdade — tolera a oscilação sem duplicar
+- [x] `state.json` migrado, semeado com os 6 IDs já conhecidos que estavam oscilando (evita re-notificar tudo de novo)
+- [x] Canal `comunidade-yt` limpo: 27 mensagens duplicadas apagadas, mantida só a fixada
+- [x] Testado local (3x seguidas, estável) e confirmado na nuvem (`gh run`) — sem falso positivo
+
+### Achado à parte (não corrigido ainda, fora do pedido original): feed da NHK parado
+- [x] Confirmado via header `Last-Modified` do próprio servidor da NHK: `www3.nhk.or.jp/rss/news/cat0.xml` não é atualizado desde **08/08/2026** — mais de uma semana
+- [ ] Checker de notícias está "funcionando" (sem erro), mas silenciosamente sem notícia nova nenhuma há dias porque a fonte parou — precisa decidir com o user se busca fonte alternativa ou espera a NHK normalizar
+
 ## Checklist — Backfill dos últimos 3 vídeos + 3 posts de comunidade (2026-08-13)
 - [x] Canais limpos (incluindo mensagens do dono, a pedido explícito) antes do backfill
 - [x] 3 últimos vídeos postados em ordem cronológica em `「🎥」vídeos-novos`
