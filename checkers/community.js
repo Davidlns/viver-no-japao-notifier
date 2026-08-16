@@ -71,6 +71,12 @@ async function postCommunityUpdate(post) {
   await postEmbed(DISCORD_WEBHOOK_URL_COMMUNITY, embed, DISCORD_COMMUNITY_PREFIX);
 }
 
+// Quantos IDs recentes guardar no estado. O feed da página não é 100% estável entre
+// requisições (cache de borda do YouTube às vezes serve uma ordem diferente dos
+// últimos posts) — comparar só com "o último visto" causa notificação duplicada
+// quando a ordem oscila. Guardar um pequeno histórico e checar por presença resolve.
+const HISTORY_SIZE = 20;
+
 export async function check(previousState) {
   if (!YOUTUBE_CHANNEL_ID) throw new Error("Variável ausente: YOUTUBE_CHANNEL_ID");
   if (!DISCORD_WEBHOOK_URL_COMMUNITY) throw new Error("Variável ausente: DISCORD_WEBHOOK_URL_COMMUNITY");
@@ -80,20 +86,25 @@ export async function check(previousState) {
     return { state: previousState, message: "nenhum post de comunidade encontrado" };
   }
 
+  const seenPostIds = previousState?.seenPostIds || [];
+
   if (!previousState) {
     return {
-      state: { postId: latest.postId, seenAt: new Date().toISOString() },
+      state: { seenPostIds: [latest.postId], seenAt: new Date().toISOString() },
       message: `primeiro run — estado inicial salvo (${latest.postId}), sem notificar`,
     };
   }
 
-  if (previousState.postId === latest.postId) {
+  if (seenPostIds.includes(latest.postId)) {
     return { state: undefined, message: "sem post novo" };
   }
 
   await postCommunityUpdate(latest);
   return {
-    state: { postId: latest.postId, seenAt: new Date().toISOString() },
+    state: {
+      seenPostIds: [latest.postId, ...seenPostIds].slice(0, HISTORY_SIZE),
+      seenAt: new Date().toISOString(),
+    },
     message: `post novo notificado (${latest.postId})`,
   };
 }
