@@ -97,6 +97,12 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Repopular comunidade-yt com os 3 posts reais mais recentes (2026-08-16)
+- [x] Causa raiz completa esclarecida: não era só cache instável — o Bruno postou 5 posts reais em sequência rápida (10h, 1 dia, 1 dia, 2 dias, 4 dias atrás), o que junto com a dedup antiga (comparar só o último ID) causava reordenação/duplicata
+- [x] Conteúdo completo buscado direto pela URL individual de cada post (`youtube.com/post/{id}`) — mais confiável que a paginação por continuação, que nessa segunda tentativa trouxe só 1 resultado em vez de 13
+- [x] 3 posts mais recentes de verdade (10h, 1 dia, 1 dia atrás) postados em ordem cronológica em `comunidade-yt`
+- [x] `state.json` já continha os IDs corretos no `seenPostIds` (do seed anterior) — nenhuma mudança necessária, confirmado que o checker automático não vai reprocessar
+
 ## Checklist — Bug: notificação duplicada no checker de comunidade (2026-08-15/16)
 - [x] User reportou "um monte de mensagem dos mesmos 2 posts" em `comunidade-yt`
 - [x] Investigado histórico de `state.json` via git log — não era problema de persistência (o commit automático estava funcionando certinho a cada run)
