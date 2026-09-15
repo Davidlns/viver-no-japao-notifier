@@ -97,6 +97,20 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Apagadas todas, mantendo só a mensagem fixada oficial (lidado rate-limit do Discord com delay entre exclusões)
 - [x] Ambos os canais (`leia-primeiro`, `regras-e-cultura`) com "Enviar Mensagens" negado pro `@everyone`, com exceção explícita pra `Equipe` e pro cargo do bot (mesma pegadinha do canal de vistos — sem a exceção do bot, ele também fica bloqueado)
 
+## Checklist — Canais de vídeo/comunidade invisíveis pra parte dos membros (2026-09-15)
+- [x] User reportou que `vídeos-novos` e `comunidade-yt` apareciam pra uns membros e pra outros não
+- [x] Descartado problema de permissão: `@everyone` tem `VIEW_CHANNEL` na base e os dois canais têm ALLOW explícito
+- [x] Causa raiz: **Onboarding em modo avançado** — só os 5 canais em `default_channel_ids` entram na barra lateral de quem passa pelo onboarding. Membros antigos (pré-onboarding) viam tudo; membros novos, não
+- [x] Corrigido via `PUT /guilds/{id}/onboarding`: `vídeos-novos` e `comunidade-yt` adicionados aos canais padrão (agora 7)
+- [ ] **Ressalva:** só vale pra quem entrar daqui pra frente. Quem já passou pelo onboarding precisa adicionar via "Explorar Canais" — não dá pra forçar retroativamente
+
+### Achado: canal de notícias foi apagado do servidor
+- [x] `「📰」notícias` não existe mais (apagado pelos donos em algum momento entre 16/08 e 15/09)
+- [x] Webhook `DISCORD_WEBHOOK_URL_NEWS` retorna 404 (morto)
+- [x] Sem impacto até agora porque o feed da NHK está parado desde 08/08 — o checker nunca chegou a tentar postar
+- [x] `Promise.allSettled` isola a falha: quando a NHK voltar, o checker de notícias vai errar sozinho sem derrubar vídeo/comunidade
+- [ ] **Decisão pendente do user:** remover o checker de notícias de vez, ou apontar pra um canal novo + achar fonte que funcione
+
 ## Checklist — Repopular comunidade-yt com os 3 posts reais mais recentes (2026-08-16)
 - [x] Causa raiz completa esclarecida: não era só cache instável — o Bruno postou 5 posts reais em sequência rápida (10h, 1 dia, 1 dia, 2 dias, 4 dias atrás), o que junto com a dedup antiga (comparar só o último ID) causava reordenação/duplicata
 - [x] Conteúdo completo buscado direto pela URL individual de cada post (`youtube.com/post/{id}`) — mais confiável que a paginação por continuação, que nessa segunda tentativa trouxe só 1 resultado em vez de 13
