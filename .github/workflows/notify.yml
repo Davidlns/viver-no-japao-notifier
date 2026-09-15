@@ -1,4 +1,5 @@
-# Roda os checkers (YouTube + notícias) a cada 15min e notifica no Discord se houver novidade.
+# Roda os checkers (vídeos + posts de comunidade do YouTube) a cada 15min
+# e notifica no Discord se houver novidade.
 name: Notifier
 
 on:
@@ -30,8 +31,6 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
           DISCORD_WEBHOOK_URL_VIDEOS: ${{ secrets.DISCORD_WEBHOOK_URL_VIDEOS }}
-          DISCORD_WEBHOOK_URL_NEWS: ${{ secrets.DISCORD_WEBHOOK_URL_NEWS }}
-          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
           DISCORD_WEBHOOK_URL_COMMUNITY: ${{ secrets.DISCORD_WEBHOOK_URL_COMMUNITY }}
 
       - name: Commit estado atualizado (se mudou)

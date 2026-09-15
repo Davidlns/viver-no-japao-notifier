@@ -1,6 +1,6 @@
 # Discord Notifier — Viver no Japão
 
-Bot em Node.js que roda vários "checkers" (YouTube, notícias) via polling e notifica no Discord quando encontra algo novo. Deployado via GitHub Actions, rodando a cada 15min, sem servidor próprio.
+Bot em Node.js que roda vários "checkers" do canal do YouTube via polling e notifica no Discord quando encontra algo novo. Deployado via GitHub Actions, rodando a cada 15min, sem servidor próprio.
 
 ## Arquitetura
 
@@ -9,10 +9,10 @@ Bot em Node.js que roda vários "checkers" (YouTube, notícias) via polling e no
                                         ↓
                     ┌───────────────────┴───────────────────┐
                     ↓                                        ↓
-          checkers/youtube.js                       checkers/news.js
-          (YouTube Data API v3)                (RSS Revista Alternativa)
+          checkers/youtube.js                    checkers/community.js
+          (YouTube Data API v3)              (aba Comunidade, scraping)
                     ↓                                        ↓
-       #🎥-vídeos-novos (webhook)              #📰-notícias (webhook)
+    #「🎥」vídeos-novos (webhook)         #「📮」comunidade-yt (webhook)
 ```
 
 Cada checker é independente — se um falhar (API fora do ar, etc.), o outro continua funcionando normalmente (`Promise.allSettled`).
@@ -38,12 +38,10 @@ node index.js
 |---|---|---|
 | `YOUTUBE_API_KEY` | sim | API Key do Google Cloud com a YouTube Data API v3 habilitada |
 | `YOUTUBE_CHANNEL_ID` | sim | ID do canal do YouTube (começa com `UC...`) |
-| `DISCORD_WEBHOOK_URL_VIDEOS` | sim | URL do webhook do canal `#🎥-vídeos-novos` |
-| `DISCORD_WEBHOOK_URL_NEWS` | sim | URL do webhook do canal `#📰-notícias` |
-| `DEEPL_API_KEY` | sim | API Key da DeepL (plano Free, sufixo `:fx`) — traduz notícias do japonês |
+| `DISCORD_WEBHOOK_URL_VIDEOS` | sim | URL do webhook do canal `#「🎥」vídeos-novos` |
 | `DISCORD_WEBHOOK_URL_COMMUNITY` | sim | URL do webhook do canal `#「📮」comunidade-yt` |
 | `DISCORD_MESSAGE_PREFIX` | não | Texto antes do embed de vídeo. Default: `Vídeo novo no ar!` |
-| `DISCORD_NEWS_PREFIX` | não | Texto antes do embed de notícia. Default: `Notícia nova!` |
+| `DISCORD_COMMUNITY_PREFIX` | não | Texto antes do embed de post. Default: `Post novo na comunidade!` |
 | `STATE_FILE` | não | Path do arquivo de estado. Default: `state.json` |
 
 ## Checkers
@@ -51,17 +49,18 @@ node index.js
 ### `checkers/youtube.js`
 Polling na YouTube Data API v3 (`channels` + `playlistItems`, ~2 unidades de quota por run — folgado dentro do limite gratuito de 10.000/dia mesmo rodando a cada 15min).
 
-### `checkers/news.js`
-Consome o RSS da **NHK doméstica** (`www3.nhk.or.jp/rss/news/cat0.xml`, japonês, notícia dura de verdade) e traduz título + descrição pro português via **DeepL API Free** (500 mil caracteres/mês grátis, nunca expira).
-
 ### `checkers/community.js`
-Sem API oficial pra Community Post do YouTube — extrai do `ytInitialData` embutido no HTML público da aba Comunidade do canal (`/channel/{id}/community`). Frágil a mudanças de estrutura de página (mesma categoria de risco que a fonte de notícias original), mas não contorna nenhuma proteção anti-bot.
+Sem API oficial pra Community Post do YouTube — extrai do `ytInitialData` embutido no HTML público da aba Comunidade do canal (`/channel/{id}/community`). Frágil a mudanças de estrutura de página, mas não contorna nenhuma proteção anti-bot.
 
-**Fontes descartadas nessa investigação:**
-- NHK World Português — sem RSS público (app React com API GraphQL interna não documentada)
-- Portal Mie — bloqueado por Cloudflare anti-bot (não contornado, é linha rígida)
-- Revista Alternativa — RSS funciona, mas é revista de lifestyle (beleza, culinária, moda), não notícia dura
-- Alternativa Online, IPC Digital, RPJNEWS, International Press (edição PT) — feeds quebrados, domínios errados ou fora do ar
+A dedup guarda os últimos 20 IDs vistos (`seenPostIds`) em vez de só o último: o feed dessa página não é estável entre requisições, e comparar só com o último ID causava notificação duplicada.
+
+## Checker de notícias (removido em 15/09/2026)
+
+Existiu um `checkers/news.js` que consumia o RSS da NHK doméstica e traduzia via DeepL. Foi removido porque:
+- O feed da NHK (`www3.nhk.or.jp/rss/news/cat0.xml`) parou de atualizar em 08/08/2026 (confirmado pelo header `Last-Modified` do servidor deles)
+- O canal `#📰-notícias` foi apagado do servidor e o webhook morreu (404)
+
+Fontes de notícia investigadas e descartadas na época: NHK World PT (sem RSS, API GraphQL interna), Portal Mie (Cloudflare anti-bot), Revista Alternativa (RSS OK mas é revista de lifestyle, não notícia dura), Alternativa Online / IPC Digital / RPJNEWS / International Press PT (feeds quebrados ou fora do ar). Se um dia voltar o assunto, o histórico está no `PROGRESS.md`.
 
 ## Deploy
 

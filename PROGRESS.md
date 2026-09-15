@@ -109,7 +109,14 @@ Atualizado a cada passo concluído. Ver plano completo em [`PLAN.md`](./PLAN.md)
 - [x] Webhook `DISCORD_WEBHOOK_URL_NEWS` retorna 404 (morto)
 - [x] Sem impacto até agora porque o feed da NHK está parado desde 08/08 — o checker nunca chegou a tentar postar
 - [x] `Promise.allSettled` isola a falha: quando a NHK voltar, o checker de notícias vai errar sozinho sem derrubar vídeo/comunidade
-- [ ] **Decisão pendente do user:** remover o checker de notícias de vez, ou apontar pra um canal novo + achar fonte que funcione
+- [x] **Decisão do user: remover o checker de notícias de vez.** Executado:
+  - `checkers/news.js` deletado; import e registro removidos do `index.js`
+  - Dependência `fast-xml-parser` removida (era usada só por ele — restou só `dotenv`)
+  - Chave `news` removida do `state.json`
+  - `DISCORD_WEBHOOK_URL_NEWS`, `DEEPL_API_KEY` e `DISCORD_NEWS_PREFIX` tirados do `.env`, `.env.example` e do workflow
+  - Secret `DISCORD_WEBHOOK_URL_NEWS` apagado do GitHub (webhook morto, sem valor). **`DEEPL_API_KEY` mantido de propósito** — a chave ainda é válida e reutilizável se um dia voltar o assunto; é só avisar pra eu apagar
+  - README reescrito com a arquitetura de 2 checkers + seção registrando por que o de notícias saiu
+- [x] Bot testado local: roda limpo com os 2 checkers restantes
 
 ## Checklist — Repopular comunidade-yt com os 3 posts reais mais recentes (2026-08-16)
 - [x] Causa raiz completa esclarecida: não era só cache instável — o Bruno postou 5 posts reais em sequência rápida (10h, 1 dia, 1 dia, 2 dias, 4 dias atrás), o que junto com a dedup antiga (comparar só o último ID) causava reordenação/duplicata
